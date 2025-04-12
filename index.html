@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bouncing Orange Ball + Shapes</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background-color: #222;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Variables for ball
+    let x = 100;
+    let y = 100;
+    let radius = 30;
+    let dx = 5;
+    let dy = 4;
+
+    // Function to draw orange ball
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'orange';
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Function to draw purple diamonds (rotated rectangles)
+    function drawDiamonds() {
+      for (let i = 0; i < 10; i++) {
+        let diamondX = 100 + i * 100;
+        let diamondY = 150;
+        ctx.save();
+        ctx.translate(diamondX, diamondY);
+        ctx.rotate(Math.PI / 4); // rotate 45 degrees
+        ctx.fillStyle = 'purple';
+        ctx.fillRect(-20, -20, 40, 40);
+        ctx.restore();
+      }
+    }
+
+    // Function to draw yellow line
+    function drawLine() {
+      ctx.beginPath();
+      ctx.moveTo(50, 0);
+      ctx.lineTo(50, canvas.height);
+      ctx.strokeStyle = 'yellow';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+    }
+
+    // Update animation
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawDiamonds();
+      drawLine();
+      drawBall();
+
+      // Bounce logic
+      if (x + radius > canvas.width || x - radius < 0) {
+        dx = -dx;
+      }
+      if (y + radius > canvas.height || y - radius < 0) {
+        dy = -dy;
+      }
+
+      x += dx;
+      y += dy;
+
+      requestAnimationFrame(update);
+    }
+
+    update();
+  </script>
+</body>
+</html>
